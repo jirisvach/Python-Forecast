@@ -6,10 +6,14 @@ from datetime import timedelta
 
 # Load
 # Nainstalovat openpyxl pres pip
-df = pd.read_excel("W:\Python\HelloWorld\spend_trends.xlsx")
+df = pd.read_excel("\spend_trends.xlsx")
 
-# Sort
-df = df.sort_values("rep_date")
+# Cast cal_id jako datetime
+df["rep_date"] = pd.to_datetime(df["rep_date"])
+
+# Sort a index reset
+#df = df.sort_values("CAL_ID").reset_index(drop=True)
+df = df.drop_duplicates().sort_values("rep_date").reset_index(drop=True)
 
 # Nove sloupce
 # 0 -> Pondeli, 6 -> Nedele
@@ -87,7 +91,7 @@ future_df = pd.DataFrame(future_preds)
 
 # Slouceni puvodniho df s forecastem a save do excelu
 output = pd.concat([df, future_df], ignore_index=True)
-output.to_excel("W:\Python\HelloWorld\spend_trends_forecast.xlsx", index=False)
+output.to_excel("\spend_trends_forecast.xlsx", index=False)
 
 print("Done spend_trends_forecast.xlsx")
 
@@ -155,5 +159,6 @@ for i in df.index:
 df.to_excel("spend_forecast_index.xlsx", index=False)
 
 print("Done spend_forecast_index.xlsx.xlsx")
+
 
 
